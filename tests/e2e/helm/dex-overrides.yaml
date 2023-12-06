@@ -14,7 +14,7 @@ ingress:
       - path: /
         pathType: ImplementationSpecific
 
-config: |-
+config:
   issuer: http://${NODE_IP}:30001
 
   storage:
