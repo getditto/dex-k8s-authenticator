@@ -7,8 +7,8 @@ global:
 replicaCount: 1
 
 image:
-  repository: mmorrison/dex-k8s-authenticator
-  tag: 1.4.0
+  repository: sl1pm4t/dex-k8s-authenticator
+  tag: 2.0.0
   pullPolicy: Always
 
 imagePullSecrets: {}

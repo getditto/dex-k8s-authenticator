@@ -18,7 +18,7 @@ global:
 replicaCount: 1
 
 image:
-  repository: mmorrison/dex-k8s-authenticator
+  repository: ghcr.io/sl1pm4t/dex-k8s-authenticator
   tag: latest
   pullPolicy: Always
 
