@@ -110,7 +110,7 @@ func (cluster *Cluster) handleCallback(w http.ResponseWriter, r *http.Request) {
 	rawIDToken, ok := token.Extra("id_token").(string)
 	if !ok {
 		cluster.renderHTMLError(w, userErrorMsg, http.StatusBadRequest)
-		log.Printf("handleCallback: no id_token in response: %q", token)
+		log.Printf("handleCallback: no id_token in response: %v", token)
 		return
 	}
 
