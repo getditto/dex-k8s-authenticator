@@ -30,11 +30,11 @@ jobs:
 
       - name: helm-template
         run: |
-          helm template charts/dex-k8s-authenticator --output-dir /github/workspace/rendered-charts/dex-k8s-authenticator
+          helm template charts/dex-k8s-authenticator --output-dir ./tmp/workspace/rendered-charts/dex-k8s-authenticator
 
       - name: kubeval
         run: |
-          kubeval -d /github/workspace/rendered-charts --strict --ignore-missing-schemas
+          kubeval -d ./tmp/workspace/rendered-charts --strict --ignore-missing-schemas
 
   e2e:
     runs-on: ubuntu-latest
