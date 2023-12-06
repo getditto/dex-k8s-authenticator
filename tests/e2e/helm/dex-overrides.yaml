@@ -9,9 +9,12 @@ ingress:
   enabled: true
   path: /
   hosts:
-  - dex.${NODE_IP}.nip.io
+  - host: dex.${NODE_IP}.nip.io
+    paths:
+      - path: /
+        pathType: ImplementationSpecific
 
-config: |-
+config:
   issuer: http://${NODE_IP}:30001
 
   storage:

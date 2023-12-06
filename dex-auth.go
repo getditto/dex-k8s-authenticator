@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"path"
 	"time"
 
@@ -110,7 +110,7 @@ func (cluster *Cluster) handleCallback(w http.ResponseWriter, r *http.Request) {
 	rawIDToken, ok := token.Extra("id_token").(string)
 	if !ok {
 		cluster.renderHTMLError(w, userErrorMsg, http.StatusBadRequest)
-		log.Printf("handleCallback: no id_token in response: %q", token)
+		log.Printf("handleCallback: no id_token in response: %v", token)
 		return
 	}
 
@@ -138,7 +138,7 @@ func (cluster *Cluster) handleCallback(w http.ResponseWriter, r *http.Request) {
 	if cluster.Config.IDP_Ca_Pem != "" {
 		IdpCaPem = cluster.Config.IDP_Ca_Pem
 	} else if cluster.Config.IDP_Ca_Pem_File != "" {
-		content, err := ioutil.ReadFile(cluster.Config.IDP_Ca_Pem_File)
+		content, err := os.ReadFile(cluster.Config.IDP_Ca_Pem_File)
 		if err != nil {
 			log.Fatalf("Failed to load CA from file %s, %s", cluster.Config.IDP_Ca_Pem_File, err)
 		}
