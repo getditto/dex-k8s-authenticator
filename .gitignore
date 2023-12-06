@@ -3,3 +3,4 @@ bin
 ./idea
 *.iml
 dex-k8s-authenticator
+!charts/dex-k8s-authenticator
