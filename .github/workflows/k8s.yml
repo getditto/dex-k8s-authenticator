@@ -24,17 +24,12 @@ jobs:
           jq: latest
           yq: latest
 
-      - name: helm-lint-dex
-        run: |
-          helm lint charts/dex
-
       - name: helm-lint-dex-k8s-auth
         run: |
           helm lint charts/dex-k8s-authenticator
 
       - name: helm-template
         run: |
-          helm template charts/dex --output-dir /github/workspace/rendered-charts/dex
           helm template charts/dex-k8s-authenticator --output-dir /github/workspace/rendered-charts/dex-k8s-authenticator
 
       - name: kubeval
@@ -66,7 +61,8 @@ jobs:
 
       - name: install-dex
         run: |
-          helm install -f /tmp/dex-overrides.yaml dex ./charts/dex
+          helm repo add dexidp https://charts.dexidp.io
+          helm install -f /tmp/dex-overrides.yaml dex dexidp/dex
           kubectl describe deployment dex
           kubectl rollout status deploy dex -w
 
