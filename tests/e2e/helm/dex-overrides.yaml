@@ -3,7 +3,9 @@
 service:
   type: NodePort
   port: 5556
-  nodePort: 30001
+  ports:
+    http:
+      nodePort: 30001
 
 ingress:
   enabled: true
