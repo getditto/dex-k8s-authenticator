@@ -46,8 +46,8 @@ jobs:
           kubectl: latest
           stern: latest
 
-      - name: Install curl
-        run: sudo apt-get install -y curl net-tools
+#      - name: Install curl
+#        run: sudo apt-get install -y curl
 
       - name: setup-kind
         uses: helm/kind-action@v1.5.0
@@ -82,11 +82,6 @@ jobs:
 
       - name: test
         run: |
-          kubectl get pods 
-          kubectl get services 
-          sleep 5
-          netstat -anp | grep LISTEN
+          kubectl get pods
           export NODE_IP=$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}")
-          echo $NODE_IP
-          curl -L -v "http://${NODE_IP}:30000/login/my-cluster"
           curl -Lsf "http://${NODE_IP}:30000/login/my-cluster" | grep "Log in to Your Account"
