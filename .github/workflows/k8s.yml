@@ -75,10 +75,12 @@ jobs:
         run: |
           helm install -f /tmp/dex-k8s-auth-overrides.yaml dex-k8s-authenticator ./charts/dex-k8s-authenticator
           kubectl describe deployment dex-k8s-authenticator
-          kubectl rollout status deploy dex-k8s-authenticator -w || (stern --no-follow dex-k8s-authenticator)
+          kubectl rollout status deploy dex-k8s-authenticator -w
 
       - name: test
         run: |
-            kubectl get pods 
-            export NODE_IP=$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}")
-            curl -Lsf "http://${NODE_IP}:30000/login/my-cluster" | grep "Log in to Your Account"
+          kubectl get pods 
+          export NODE_IP=$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}")
+          echo $NODE_IP
+          curl -Lsf "http://${NODE_IP}:30000/login/my-cluster"
+          curl -Lsf "http://${NODE_IP}:30000/login/my-cluster" | grep "Log in to Your Account"
