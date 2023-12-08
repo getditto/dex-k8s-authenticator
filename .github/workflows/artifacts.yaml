@@ -64,7 +64,6 @@ jobs:
         with:
           images: |
             ${{ steps.image-name.outputs.value }}
-            dexidp/dex
           flavor: |
             latest = false
           tags: |
