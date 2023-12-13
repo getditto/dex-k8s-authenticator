@@ -1,94 +1,76 @@
 {{ define "linux-mac-common" }}
-  {{ if .IDPCaURI }}
-    <h3>Copy IDP CA Certificate From URL</h3>
 
-    <p>Copy this CA Certificate and download it to your .kube directory</p>
-    <div class="command">
+  <div>
+  <h2>Install kubelogin plugin</h2>
+  <a title="kubelogin" href="https://github.com/int128/kubelogin">https://github.com/int128/kubelogin</a>
 
-      <button class="btn" style="float:right" data-clipboard-snippet="">
-        <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
-      </button>
-      <pre><code>curl --create-dirs -s {{ .IDPCaURI }} -o ${HOME}/.kube/certs/{{ .ClusterName }}/idp-ca.crt</code></pre>
-    </div>
-  {{ end }}
+  <p>The kubelogin plugin streamlines OIDC authentication from the command line.</p>
+  <p>
+  When you run kubectl, kubelogin opens the browser and you can log in to the provider. 
+  Then kubelogin gets a token from the provider and kubectl can access Kubernetes APIs with the token.
+  </p>
 
-  {{ if .IDPCaPem }}
-    <h3>Copy IDP CA Certificate From PEM</h3>
-
-    <p>Put the CA Certificate into your .kube directory</p>
-
-    <div class="command">
-
-      <button class="btn" style="float:right" data-clipboard-snippet="">
-        <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
-      </button>
-      <pre><code>mkdir -p ${HOME}/.kube/certs/{{ .ClusterName }}/ &amp;&amp; cat &lt;&lt; EOF &gt; ${HOME}/.kube/certs/{{ .ClusterName }}/idp-ca.crt
-{{ .IDPCaPem }}
-EOF</code></pre>
-    </div>
-  {{ end }}
-
-
-  {{ if .K8sCaURI }}
-    <h3>Copy Kubernetes CA Certificate From URL</h3>
-
-    <p>Copy this CA Certificate and download it to your .kube directory</p>
-    <div class="command">
-
-      <button class="btn" style="float: right" data-clipboard-snippet="">
-        <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
-      </button>
-      <pre><code>curl --create-dirs -s {{ .K8sCaURI }} -o ${HOME}/.kube/certs/{{ .ClusterName }}/k8s-ca.crt</code></pre>
-    </div>
-  {{ end }}
-
-  {{ if .K8sCaPem }}
-    <h3>Copy Kubernetes CA Certificate From PEM</h3>
-
-    <p>Put the CA Certificate into your .kube directory</p>
-
-    <div class="command">
-
-      <button class="btn" style="float:right" data-clipboard-snippet="">
-        <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
-      </button>
-      <pre><code>mkdir -p ${HOME}/.kube/certs/{{ .ClusterName }}/ &amp;&amp; cat &lt;&lt; EOF &gt; ${HOME}/.kube/certs/{{ .ClusterName }}/k8s-ca.crt
-{{ .K8sCaPem }}
-EOF</code></pre>
-    </div>
-  {{ end }}
-
-  <h3>Run configuration commands</h3>
-
-  <p>These commands will update <tt>~/.kube/config</tt></p>
-
+  <p>
+    <b> * Install with brew:</b>
+  </p>
   <div class="command">
-
-    <button class="btn" style="float:right" data-clipboard-snippet="">
-      <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt="">
-    </button>
-  <pre><code>kubectl config set-cluster {{ .ClusterName }} \
-  {{- if or .K8sCaPem .K8sCaURI }}
-    --certificate-authority=${HOME}/.kube/certs/{{ .ClusterName}}/k8s-ca.crt \
-  {{- end }}
-    --server={{ .K8sMasterURI }}</code></pre>
-  </div>
-
-  <div class="command">
-
     <button class="btn" style="float:right" data-clipboard-snippet="">
       <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
     </button>
-  <pre><code>kubectl config set-credentials {{ .Username }}-{{ .ClusterName }} \
-    --auth-provider=oidc \
-    --auth-provider-arg="idp-issuer-url={{ .Issuer }}" \
-    --auth-provider-arg="client-id={{ .ClientID }}" \
-    --auth-provider-arg="client-secret={{ .ClientSecret }}" \
-    --auth-provider-arg="refresh-token={{ .RefreshToken }}" \
-    --auth-provider-arg="id-token={{ .IDToken }}"
-  {{- if or (.IDPCaURI) (.IDPCaPem) }} \
-    --auth-provider-arg=idp-certificate-authority=${HOME}/.kube/certs/{{ .ClusterName }}/idp-ca.crt
-  {{- end }}</code></pre>
+    <pre><code> brew install int128/kubelogin/kubelogin </pre></code>
+  </div>
+
+  <p>
+    <b> * Install with krew:</b>
+  </p>
+  <p><i>krew</i> is a plugin manager for <tt>kubectl</tt></p>
+  <div class="command">
+    <button class="btn" style="float:right" data-clipboard-snippet="">
+      <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
+    </button>
+    <pre><code>kubectl krew install oidc-login</pre></code>
+  </div>
+
+  </div>
+
+  <h2>Add / Update kubeconfig context</h2>
+
+  <p>These commands will update <tt>~/.kube/config</tt>. Use <tt>--kubeconfig=xyz</tt> to update a different config file.</p>
+
+  <p><b>Create / Update cluster settings in kubeconfig:</b></p>
+  <div class="command">
+    <button class="btn" style="float:right" data-clipboard-snippet="">
+      <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt="">
+    </button>
+    <pre><code>{{- if or .K8sCaPem -}}
+  # API Server CA Certificate
+  K8S_CA_CERT="{{.K8sCaPem}}"
+
+{{ end }} kubectl config set-cluster {{ .ClusterName }} \
+  {{- if .K8sCaPem }}
+  --certificate-authority <(echo -n $K8S_CA_CERT) \
+  --embed-certs=true \
+  {{- end }}
+  --server={{ .K8sMasterURI }}</code></pre>
+  </div>
+
+  <div class="command">
+    <button class="btn" style="float:right" data-clipboard-snippet="">
+      <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
+    </button>
+    <pre><code>kubectl config set-credentials {{ .Username }}-{{ .ClusterName }} \
+      --exec-api-version=client.authentication.k8s.io/v1beta1 \
+      --exec-command=kubectl \
+      --exec-arg=oidc-login \
+      --exec-arg=get-token \
+      --exec-arg=--listen-address=127.0.0.1:18000 \
+      --exec-arg=--oidc-issuer-url={{ .Issuer }} \
+      --exec-arg=--oidc-client-id={{ .ClientID }} \
+  {{- if .ClientSecret }}
+      --exec-arg=--oidc-client-secret=YOUR_CLIENT_SECRET \
+  {{- end }}
+      --exec-arg=--oidc-extra-scope=email \
+      --exec-arg=--oidc-extra-scope=groups</code></pre>
   </div>
 
   <div class="command">
