@@ -8,7 +8,11 @@
   {{ if .KubectlVersion }}
   <p>
   Download kubectl:
-  <a title="Download kubectl" href="https://storage.googleapis.com/kubernetes-release/release/{{.KubectlVersion}}/bin/darwin/amd64/kubectl">
+  <a title="Apple Silicon" href="https://storage.googleapis.com/kubernetes-release/release/{{.KubectlVersion}}/bin/darwin/amd64/kubectl">
+    https://storage.googleapis.com/kubernetes-release/release/{{.KubectlVersion}}/bin/darwin/arm64/kubectl
+  </a>
+
+  <a title="Intel" href="https://storage.googleapis.com/kubernetes-release/release/{{.KubectlVersion}}/bin/darwin/amd64/kubectl">
     https://storage.googleapis.com/kubernetes-release/release/{{.KubectlVersion}}/bin/darwin/amd64/kubectl
   </a>
   </p>
