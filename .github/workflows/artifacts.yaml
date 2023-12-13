@@ -76,7 +76,7 @@ jobs:
             type=semver,pattern={{raw}},suffix=-${{ matrix.variant }}
             type=raw,value=latest,enable={{is_default_branch}},suffix=-${{ matrix.variant }}
           labels: |
-            org.opencontainers.image.documentation=https://github.com/sl1pm4t/dex-k8s-authenticator
+            org.opencontainers.image.documentation=https://github.com/getditto/dex-k8s-authenticator
 
       # Multiple exporters are not supported yet
       # See https://github.com/moby/buildkit/pull/2760

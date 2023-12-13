@@ -4,7 +4,7 @@ description: "Authenticator for using Dex with Kubernetes"
 name: dex-k8s-authenticator
 version: 2.0.0
 sources:
-- https://github.com/sl1pm4t/dex-k8s-authenticator
+- https://github.com/getditto/dex-k8s-authenticator
 maintainers:
 - name: Matt Morrison
   email: matt.morrison@ditto.live

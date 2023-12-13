@@ -1,4 +1,4 @@
-module github.com/sl1pm4t/dex-k8s-authenticator
+module github.com/getditto/dex-k8s-authenticator
 
 go 1.20
 
