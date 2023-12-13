@@ -67,7 +67,7 @@
       --exec-arg=--oidc-issuer-url={{ .Issuer }} \
       --exec-arg=--oidc-client-id={{ .ClientID }} \
   {{- if .ClientSecret }}
-      --exec-arg=--oidc-client-secret=YOUR_CLIENT_SECRET \
+      --exec-arg=--oidc-client-secret={{ .ClientSecret }} \
   {{- end }}
       --exec-arg=--oidc-extra-scope=email \
       --exec-arg=--oidc-extra-scope=groups</code></pre>
