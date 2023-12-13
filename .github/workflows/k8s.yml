@@ -56,8 +56,8 @@ jobs:
 
       - name: build-ci-image
         run: |
-          docker build -t sl1pm4t/dex-k8s-authenticator:${GITHUB_SHA} .
-          kind load docker-image sl1pm4t/dex-k8s-authenticator:${GITHUB_SHA}
+          docker build -t getditto/dex-k8s-authenticator:${GITHUB_SHA} .
+          kind load docker-image getditto/dex-k8s-authenticator:${GITHUB_SHA}
 
       - name: update-helm-values
         run: |

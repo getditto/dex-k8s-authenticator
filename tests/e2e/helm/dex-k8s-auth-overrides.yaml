@@ -1,5 +1,5 @@
 image:
-  repository: sl1pm4t/dex-k8s-authenticator
+  repository: getditto/dex-k8s-authenticator
   tag: ${CI_TAG}
   pullPolicy: Never
 
