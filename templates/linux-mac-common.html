@@ -58,19 +58,22 @@
     <button class="btn" style="float:right" data-clipboard-snippet="">
       <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
     </button>
-    <pre><code>kubectl config set-credentials {{ .Username }}-{{ .ClusterName }} \
-      --exec-api-version=client.authentication.k8s.io/v1beta1 \
-      --exec-command=kubectl \
-      --exec-arg=oidc-login \
-      --exec-arg=get-token \
-      --exec-arg=--listen-address=127.0.0.1:18000 \
-      --exec-arg=--oidc-issuer-url={{ .Issuer }} \
-      --exec-arg=--oidc-client-id={{ .ClientID }} \
+    <pre><code># Delete existing user (if it exists)
+kubectl config delete-user {{ .Username }}-{{ .ClusterName }} || true
+
+kubectl config set-credentials {{ .Username }}-{{ .ClusterName }} \
+    --exec-api-version=client.authentication.k8s.io/v1beta1 \
+    --exec-command=kubectl \
+    --exec-arg=oidc-login \
+    --exec-arg=get-token \
+    --exec-arg=--listen-address=127.0.0.1:18000 \
+    --exec-arg=--oidc-issuer-url={{ .Issuer }} \
+    --exec-arg=--oidc-client-id={{ .ClientID }} \
   {{- if .ClientSecret }}
-      --exec-arg=--oidc-client-secret={{ .ClientSecret }} \
+    --exec-arg=--oidc-client-secret={{ .ClientSecret }} \
   {{- end }}
-      --exec-arg=--oidc-extra-scope=email \
-      --exec-arg=--oidc-extra-scope=groups</code></pre>
+    --exec-arg=--oidc-extra-scope=email \
+    --exec-arg=--oidc-extra-scope=groups</code></pre>
   </div>
 
   <div class="command">
