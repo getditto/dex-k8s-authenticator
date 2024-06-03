@@ -48,7 +48,7 @@
 
 {{ end }} kubectl config set-cluster {{ .ClusterName }} \
   {{- if .K8sCaPem }}
-  --certificate-authority <(echo -n $K8S_CA_CERT) \
+  --certificate-authority <(echo -n "$K8S_CA_CERT") \
   --embed-certs=true \
   {{- end }}
   --server={{ .K8sMasterURI }}</code></pre>
